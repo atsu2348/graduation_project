@@ -1,0 +1,33 @@
+$user = "terayama"
+$source = "t_terayama-0-20.07.18.15.57.15.CSV"
+
+$preopen_start_time = "2018/7/20 15:59:26"
+$preopen_end_time = "2018/7/20 16:00:26"
+$preclose_start_time = "2018/7/20 16:00:48"
+$preclose_end_time = "2018/7/20 16:01:48"
+$write_start_time = "2018/7/20 16:01:59"
+$write_end_time = "2018/7/20 16:05:04"
+$postclose_start_time = "2018/7/20 16:05:15"
+$postclose_end_time = "2018/7/20 16:06:15"
+
+# Do not edit below this line
+$tmp = "tmp.csv"
+$preopen_output = ".\preopen-eeg-" + $user + ".csv"
+ Import-Csv $source |foreach { $_.time = $_.time -as [datetime]; $_}| Where-Object {$_.time -ge $preopen_start_time -and $_.time -le $preopen_end_time}|Export-Csv -path $tmp -Encoding UTF8 -NoTypeInformation -UseCulture
+ Get-Content $tmp |ForEach-Object { $_ -replace """" ,""} | set-content $preopen_output
+ rm $tmp
+
+$preclose_output = ".\preclose-eeg-" + $user + ".csv"
+ Import-Csv $source |foreach { $_.time = $_.time -as [datetime]; $_}| Where-Object {$_.time -ge $preclose_start_time -and $_.time -le $preclose_end_time}|Export-Csv -path $tmp -Encoding UTF8 -NoTypeInformation -UseCulture
+ Get-Content $tmp |ForEach-Object { $_ -replace """" ,""} | set-content $preclose_output
+ rm $tmp
+
+$write_output = ".\write-eeg-" + $user + ".csv"
+Import-Csv $source |foreach { $_.time = $_.time -as [datetime]; $_}| Where-Object {$_.time -ge $write_start_time -and $_.time -le $write_end_time}|Export-Csv -path $tmp -Encoding UTF8 -NoTypeInformation -UseCulture
+Get-Content $tmp |ForEach-Object { $_ -replace """" ,""} | set-content $write_output
+rm $tmp
+
+$postclose_output = ".\postclose-eeg-" + $user + ".csv"
+ Import-Csv $source |foreach { $_.time = $_.time -as [datetime]; $_}| Where-Object {$_.time -ge $postclose_start_time -and $_.time -le $postclose_end_time}|Export-Csv -path $tmp -Encoding UTF8 -NoTypeInformation -UseCulture
+ Get-Content $tmp |ForEach-Object { $_ -replace """" ,""} | set-content $postclose_output
+ rm $tmp

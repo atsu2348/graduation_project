@@ -1,0 +1,4 @@
+=IF(B4>B3,A3,A3+TIME(0,0,1))
+
+
+yyyy/m/d h:mm:ss;@
